@@ -10,10 +10,9 @@
 ## Структура
 
 1. docker-compose.yaml - основной конфиг развёртывания контейнеров.
-2. .env - доп.файл для MySQL-exporter'а.
-3. ./prometheus/config/prometheus.yaml - конфигурационный файл Prometheus
-4. ./grafana/dashboards/AutoImported - дашборды для Grafana
-5. ./apache-configs/010-status.conf - конфиг-файл для mod_status apache
+2. ./prometheus/config/prometheus.yaml - конфигурационный файл Prometheus
+3. ./grafana/dashboards/AutoImported - дашборды для Grafana
+4. ./apache-configs/010-status.conf - конфиг-файл для mod_status apache
 
 ## Запуск
 

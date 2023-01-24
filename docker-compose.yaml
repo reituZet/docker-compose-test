@@ -24,6 +24,7 @@ services:
       - 4688
     volumes:
       - ./apache-configs/010-status.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./wp-content:/var/www/html/
     networks:
         - project
     depends_on:
@@ -47,22 +48,22 @@ services:
     networks:
       - project
 
-  mysql_exporter:
-    container_name: mysql_exporter-git
-    image: "prom/mysqld-exporter"
-    restart: unless-stopped
-    ports:
-      - "9104:9104"
-    environment:
-    - DATA_SOURCE_NAME=${MYSQL_USER_EXPORTER}:${MYSQL_PASSWORD_EXPORTER}@(mysql:3306)/
-    networks:
-      - project
-    logging:
-        driver: "json-file"
-        options:
-          max-size: "5m"
-    expose:
-      - 9207
+  # mysql_exporter:
+  #   container_name: mysql_exporter-git
+  #   image: "prom/mysqld-exporter"
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9104:9104"
+  #   environment:
+  #   - DATA_SOURCE_NAME=${MYSQL_USER_EXPORTER}:${MYSQL_PASSWORD_EXPORTER}@(mysql:3306)/
+  #   networks:
+  #     - project
+  #   logging:
+  #       driver: "json-file"
+  #       options:
+  #         max-size: "5m"
+  #   expose:
+  #     - 9207
 
   apache-exporter:
     container_name: apache-exporter
