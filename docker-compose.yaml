@@ -1,0 +1,105 @@
+version: '2'
+
+volumes:
+  maria_db:
+
+networks:
+  project:
+
+services:
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress:6.1-php8.0-apache
+    restart: always
+    hostname: wordpress
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+      WORDPRESS_DB_NAME: wordpress
+    expose:
+      - 4688
+    volumes:
+      - ./apache-configs/010-status.conf:/etc/apache2/sites-enabled/000-default.conf
+    networks:
+        - project
+    depends_on:
+      - db
+
+  db:
+    container_name: mariadb
+    image: mariadb:10.10
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - 9207
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
+      MARIADB_ROOT_PASSWORD: admin
+    volumes:
+      - maria_db:/var/lib/mysql
+    networks:
+      - project
+
+  mysql_exporter:
+    container_name: mysql_exporter-git
+    image: "prom/mysqld-exporter"
+    restart: unless-stopped
+    ports:
+      - "9104:9104"
+    environment:
+    - DATA_SOURCE_NAME=${MYSQL_USER_EXPORTER}:${MYSQL_PASSWORD_EXPORTER}@(mysql:3306)/
+    networks:
+      - project
+    logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+    expose:
+      - 9207
+
+  apache-exporter:
+    container_name: apache-exporter
+    image: bitnami/apache-exporter:0.11.0
+    command:
+      - --scrape_uri=http://wordpress/server-status?auto
+    restart: always
+    ports:
+      - 9117:9117
+    networks:
+      - project
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.19.0
+    user: root
+    restart: always
+    ports:
+      - 9000:9090
+    volumes:
+      - ./prometheus/config:/prometheus
+    command:
+      - '--config.file=/prometheus/prometheus.yaml'
+      - '--storage.tsdb.path=/data'
+    networks:
+      - project
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:7.0.3
+    restart: always
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - project
