@@ -1,6 +1,6 @@
 # Docker-compose.test
 
-Основное задание:
+Задание:
 1. Установить docker, docker-compose
 2. Найти готовые контейнеры и запустить через docker-compose связку mariadb+wordpress+apache
 3. Активировать плагин mod_status для mariadb+wordpress+apache
