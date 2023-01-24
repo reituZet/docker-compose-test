@@ -1,6 +1,6 @@
 # Docker-compose.test
 
-Основное задание:
+Задание:
 1. Установить docker, docker-compose
 2. Найти готовые контейнеры и запустить через docker-compose связку mariadb+wordpress+apache
 3. Активировать плагин mod_status для mariadb+wordpress+apache
@@ -10,10 +10,9 @@
 ## Структура
 
 1. docker-compose.yaml - основной конфиг развёртывания контейнеров.
-2. .env - доп.файл для MySQL-exporter'а.
-3. ./prometheus/config/prometheus.yaml - конфигурационный файл Prometheus
-4. ./grafana/dashboards/AutoImported - дашборды для Grafana
-5. ./apache-configs/010-status.conf - конфиг-файл для mod_status apache
+2. ./prometheus/config/prometheus.yaml - конфигурационный файл Prometheus
+3. ./grafana/dashboards/AutoImported - дашборды для Grafana
+4. ./apache-configs/010-status.conf - конфиг-файл для mod_status apache
 
 ## Запуск
 
